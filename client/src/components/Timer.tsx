@@ -6,7 +6,7 @@ export const Timer: React.FC = () => {
   const [startTime, setStartTime] = useState<number | null>(null);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: number;
     
     if (isRunning && startTime) {
       interval = setInterval(() => {
@@ -44,33 +44,47 @@ export const Timer: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4">
-      <div className="text-6xl font-mono font-bold text-gray-900">
-        {formatTime(elapsedTime)}
+    <div className="text-center space-y-8">
+      <div className="relative">
+        <div className="timer-display">
+          {formatTime(elapsedTime)}
+        </div>
+        {isRunning && (
+          <div className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full pulse-animation"></div>
+        )}
       </div>
       
-      <div className="flex space-x-4">
+      <div className="flex justify-center space-x-4">
         {!isRunning ? (
           <button
             onClick={handleStart}
-            className="btn btn-success px-6 py-3 text-lg"
+            className="btn btn-success flex items-center space-x-2"
           >
-            ▶ Start
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            <span>Démarrer</span>
           </button>
         ) : (
           <button
             onClick={handlePause}
-            className="btn btn-secondary px-6 py-3 text-lg"
+            className="btn btn-warning flex items-center space-x-2"
           >
-            ⏸ Pause
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Pause</span>
           </button>
         )}
         
         <button
           onClick={handleReset}
-          className="btn btn-danger px-6 py-3 text-lg"
+          className="btn btn-secondary flex items-center space-x-2"
         >
-          ⏹ Reset
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          <span>Reset</span>
         </button>
       </div>
     </div>
