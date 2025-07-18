@@ -1,58 +1,17 @@
-import React, { useState } from 'react';
-
-interface Activity {
-  id: string;
-  name: string;
-  color: string;
-  description?: string;
-}
-
-interface ActivityEvent {
-  id: string;
-  activityId: string;
-  activityName: string;
-  timestamp: number;
-  duration?: number;
-}
-
-const defaultActivities: Activity[] = [
-  { id: '1', name: 'Préparation', color: 'bg-gradient-to-r from-blue-500 to-blue-600', description: 'Préparation du poste' },
-  { id: '2', name: 'Travail principal', color: 'bg-gradient-to-r from-emerald-500 to-green-600', description: 'Activité principale' },
-  { id: '3', name: 'Pause', color: 'bg-gradient-to-r from-amber-400 to-yellow-500', description: 'Pause/Arrêt' },
-  { id: '4', name: 'Attente', color: 'bg-gradient-to-r from-red-500 to-red-600', description: 'Attente/Blocage' },
-  { id: '5', name: 'Communication', color: 'bg-gradient-to-r from-purple-500 to-violet-600', description: 'Discussion/Échange' },
-];
+import React from 'react';
+import { useStore } from '../store/useStore';
 
 export const ActivityPanel: React.FC = () => {
-  const [activities] = useState<Activity[]>(defaultActivities);
-  const [events, setEvents] = useState<ActivityEvent[]>([]);
-  const [currentActivity, setCurrentActivity] = useState<string | null>(null);
+  const { 
+    activities,
+    sessions,
+    currentSessionId,
+    currentActivityId,
+    logActivity
+  } = useStore();
 
-  const logActivity = (activity: Activity) => {
-    const now = Date.now();
-    
-    if (currentActivity) {
-      // Terminer l'activité précédente
-      setEvents(prev => 
-        prev.map(event => 
-          event.id === currentActivity 
-            ? { ...event, duration: now - event.timestamp }
-            : event
-        )
-      );
-    }
-    
-    // Commencer la nouvelle activité
-    const newEvent: ActivityEvent = {
-      id: Date.now().toString(),
-      activityId: activity.id,
-      activityName: activity.name,
-      timestamp: now,
-    };
-    
-    setEvents(prev => [...prev, newEvent]);
-    setCurrentActivity(newEvent.id);
-  };
+  const currentSession = sessions.find(s => s.id === currentSessionId);
+  const events = currentSession?.events || [];
 
   const formatTime = (timestamp: number): string => {
     const date = new Date(timestamp);
@@ -76,7 +35,7 @@ export const ActivityPanel: React.FC = () => {
         {activities.map((activity) => (
           <button
             key={activity.id}
-            onClick={() => logActivity(activity)}
+            onClick={() => logActivity(activity.id)}
             className={`activity-button ${activity.color} p-5 rounded-2xl text-white font-medium transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl`}
           >
             <div className="text-base font-semibold mb-1">{activity.name}</div>
@@ -108,7 +67,7 @@ export const ActivityPanel: React.FC = () => {
               <p className="text-slate-400 text-sm mt-1">Cliquez sur une activité pour commencer</p>
             </div>
           ) : (
-            events.map((event, index) => (
+            events.map((event) => (
               <div key={event.id} className="flex items-center justify-between p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-white/20 hover:bg-white/80 transition-all duration-300 fade-in">
                 <div className="flex items-center space-x-4">
                   <div className="relative">
@@ -117,7 +76,7 @@ export const ActivityPanel: React.FC = () => {
                         activities.find(a => a.id === event.activityId)?.color || 'bg-gray-400'
                       }`}
                     />
-                    {index === events.length - 1 && !event.duration && (
+                    {event.id === currentActivityId && !event.duration && (
                       <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full pulse-animation"></div>
                     )}
                   </div>

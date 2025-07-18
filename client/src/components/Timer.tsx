@@ -1,21 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useStore } from '../store/useStore';
 
 export const Timer: React.FC = () => {
-  const [isRunning, setIsRunning] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const [startTime, setStartTime] = useState<number | null>(null);
+  const { 
+    isTimerRunning, 
+    timerElapsedTime, 
+    timerStartTime,
+    startTimer,
+    pauseTimer,
+    resetTimer,
+    updateTimerElapsed
+  } = useStore();
 
   useEffect(() => {
     let interval: number;
     
-    if (isRunning && startTime) {
+    if (isTimerRunning && timerStartTime) {
       interval = setInterval(() => {
-        setElapsedTime(Date.now() - startTime);
+        updateTimerElapsed(Date.now() - timerStartTime);
       }, 100);
     }
     
     return () => clearInterval(interval);
-  }, [isRunning, startTime]);
+  }, [isTimerRunning, timerStartTime, updateTimerElapsed]);
 
   const formatTime = (milliseconds: number): string => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -26,38 +33,21 @@ export const Timer: React.FC = () => {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
   };
 
-  const handleStart = () => {
-    if (!isRunning) {
-      setStartTime(Date.now() - elapsedTime);
-      setIsRunning(true);
-    }
-  };
-
-  const handlePause = () => {
-    setIsRunning(false);
-  };
-
-  const handleReset = () => {
-    setIsRunning(false);
-    setElapsedTime(0);
-    setStartTime(null);
-  };
-
   return (
     <div className="text-center space-y-8">
       <div className="relative">
         <div className="timer-display">
-          {formatTime(elapsedTime)}
+          {formatTime(timerElapsedTime)}
         </div>
-        {isRunning && (
+        {isTimerRunning && (
           <div className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full pulse-animation"></div>
         )}
       </div>
       
       <div className="flex justify-center space-x-4">
-        {!isRunning ? (
+        {!isTimerRunning ? (
           <button
-            onClick={handleStart}
+            onClick={startTimer}
             className="btn btn-success flex items-center space-x-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,7 +58,7 @@ export const Timer: React.FC = () => {
           </button>
         ) : (
           <button
-            onClick={handlePause}
+            onClick={pauseTimer}
             className="btn btn-warning flex items-center space-x-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +69,7 @@ export const Timer: React.FC = () => {
         )}
         
         <button
-          onClick={handleReset}
+          onClick={resetTimer}
           className="btn btn-secondary flex items-center space-x-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

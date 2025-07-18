@@ -1,9 +1,24 @@
+import React from 'react';
 import { Timer } from './components/Timer';
 import { ActivityPanel } from './components/ActivityPanel';
 import { VideoPlayer } from './components/VideoPlayer';
 import { TimelineChart } from './components/TimelineChart';
+import { SessionManager } from './components/SessionManager';
+import { InstallPrompt } from './components/InstallPrompt';
+import { useServiceWorker } from './hooks/useServiceWorker';
+import { useStore } from './store/useStore';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
+  useServiceWorker();
+  const { currentSessionId, createSession } = useStore();
+
+  // Create default session if none exists
+  React.useEffect(() => {
+    if (!currentSessionId) {
+      createSession(`Session ${new Date().toLocaleDateString('fr-FR')}`);
+    }
+  }, [currentSessionId, createSession]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 py-8">
@@ -18,7 +33,15 @@ function App() {
           <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mx-auto mt-4"></div>
         </header>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-8">
+          {/* PWA Installation Prompt */}
+          <InstallPrompt />
+          
+          {/* Session Manager */}
+          <SessionManager />
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
           <div className="space-y-8">
             <div className="card p-8 fade-in">
               <div className="card-header">
@@ -80,6 +103,34 @@ function App() {
           </div>
         </div>
       </div>
+      
+      {/* Toast Notifications */}
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#1f2937',
+            color: '#f9fafb',
+            borderRadius: '12px',
+            padding: '16px',
+            fontSize: '14px',
+            fontWeight: '500',
+          },
+          success: {
+            iconTheme: {
+              primary: '#10b981',
+              secondary: '#f9fafb',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#f9fafb',
+            },
+          },
+        }}
+      />
     </div>
   );
 }
