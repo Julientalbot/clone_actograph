@@ -22,7 +22,7 @@ Un outil d'analyse ergonomique et de chronométrage pour les études de poste de
 
 ```bash
 # Cloner le repository
-git clone https://github.com/votre-username/clone_actograph.git
+git clone https://github.com/Julientalbot/clone_actograph.git
 cd clone_actograph
 
 # Installer les dépendances
@@ -32,6 +32,36 @@ npm install
 # Démarrer le serveur de développement
 npm run dev
 ```
+
+## Déploiement
+
+### Déploiement sur Vercel
+
+1. **Méthode automatique** : Connectez votre repository GitHub à Vercel
+   - Allez sur [vercel.com](https://vercel.com)
+   - Connectez votre compte GitHub
+   - Sélectionnez le repository `clone_actograph`
+   - Vercel détectera automatiquement la configuration
+
+2. **Méthode CLI** :
+   ```bash
+   # Installer Vercel CLI
+   npm i -g vercel
+   
+   # Déployer
+   vercel --prod
+   ```
+
+### Configuration Vercel
+
+Le projet est configuré avec :
+- **Build Command** : `cd client && npm run build`
+- **Output Directory** : `client/dist`
+- **Install Command** : `cd client && npm install`
+
+### Variables d'environnement
+
+Aucune variable d'environnement n'est requise pour ce projet.
 
 ## Scripts disponibles
 
