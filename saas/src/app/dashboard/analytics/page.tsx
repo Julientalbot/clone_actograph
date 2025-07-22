@@ -2,6 +2,7 @@
 
 import { useWorkspaceStore } from '@/store/useWorkspaceStore';
 import { useAuth } from '@/hooks/useAuth';
+import { AnalyticsDashboard } from '@/components/AnalyticsDashboard';
 
 export default function AnalyticsPage() {
   const { sessions, currentSessionId } = useWorkspaceStore();
@@ -23,14 +24,6 @@ export default function AnalyticsPage() {
     }
     return `${minutes}min`;
   };
-
-  // Activity breakdown
-  const activityBreakdown = allEvents.reduce((acc, event) => {
-    if (event.duration) {
-      acc[event.activityName] = (acc[event.activityName] || 0) + event.duration;
-    }
-    return acc;
-  }, {} as Record<string, number>);
 
   return (
     <div className="space-y-8">
@@ -87,91 +80,9 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Activity Breakdown */}
-      {Object.keys(activityBreakdown).length > 0 && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Répartition par activité</h2>
-          <div className="space-y-4">
-            {Object.entries(activityBreakdown).map(([activity, duration]) => {
-              const percentage = (duration / totalDuration) * 100;
-              return (
-                <div key={activity} className="flex items-center space-x-4">
-                  <div className="w-32 text-sm font-medium text-slate-700 truncate">{activity}</div>
-                  <div className="flex-1">
-                    <div className="w-full bg-slate-200 rounded-full h-3">
-                      <div
-                        className="bg-gradient-to-r from-blue-500 to-indigo-500 h-3 rounded-full transition-all duration-300"
-                        style={{ width: `${percentage}%` }}
-                      />
-                    </div>
-                  </div>
-                  <div className="text-sm text-slate-600 w-16 text-right">{formatDuration(duration)}</div>
-                  <div className="text-xs text-slate-500 w-12 text-right">{percentage.toFixed(1)}%</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Current Session Details */}
+      {/* Analytics Dashboard Component */}
       {currentSession && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-slate-900">Session actuelle: {currentSession.name}</h2>
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-              currentSession.status === 'active' ? 'bg-green-100 text-green-800' :
-              currentSession.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-              'bg-gray-100 text-gray-800'
-            }`}>
-              {currentSession.status === 'active' ? 'Active' : 
-               currentSession.status === 'completed' ? 'Terminée' : 'Brouillon'}
-            </span>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="text-center p-4 bg-slate-50 rounded-xl">
-              <div className="text-2xl font-bold text-slate-900">{currentSession.events.length}</div>
-              <div className="text-sm text-slate-600">Activités</div>
-            </div>
-            <div className="text-center p-4 bg-slate-50 rounded-xl">
-              <div className="text-2xl font-bold text-slate-900">
-                {formatDuration(currentSession.events.reduce((acc, e) => acc + (e.duration || 0), 0))}
-              </div>
-              <div className="text-sm text-slate-600">Durée totale</div>
-            </div>
-            <div className="text-center p-4 bg-slate-50 rounded-xl">
-              <div className="text-2xl font-bold text-slate-900">
-                {new Date(currentSession.createdAt).toLocaleDateString('fr-FR')}
-              </div>
-              <div className="text-sm text-slate-600">Date de création</div>
-            </div>
-          </div>
-
-          {currentSession.events.length > 0 && (
-            <div>
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">Chronologie des activités</h3>
-              <div className="space-y-3 max-h-64 overflow-y-auto">
-                {currentSession.events.map((event, index) => (
-                  <div key={event.id} className="flex items-center space-x-4 p-3 bg-slate-50 rounded-lg">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <span className="text-xs font-medium text-blue-600">{index + 1}</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium text-slate-900">{event.activityName}</div>
-                      <div className="text-sm text-slate-500">
-                        {new Date(event.timestamp).toLocaleTimeString('fr-FR')}
-                      </div>
-                    </div>
-                    <div className="text-sm font-mono text-slate-700">
-                      {event.duration ? formatDuration(event.duration) : 'En cours...'}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        <AnalyticsDashboard sessionId={currentSessionId} />
       )}
 
       {/* No Data State */}

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { InstallPrompt } from '@/components/InstallPrompt';
 
 export default function DashboardLayout({
   children,
@@ -164,6 +165,7 @@ export default function DashboardLayout({
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <InstallPrompt />
         {children}
       </main>
     </div>

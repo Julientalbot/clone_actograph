@@ -5,11 +5,11 @@ export default function LandingPage() {
     'Chronométrage haute précision',
     'Analyse ergonomique professionnelle',
     'Rapports automatiques avec graphiques',
-    'Templates par secteur d'activité',
+    'Templates par secteur d\'activité',
     'Conformité normes ISO et EN',
     'Mode hors ligne et synchronisation',
     'Export PDF et Excel',
-    'Gestion d'équipe collaborative',
+    'Gestion d\'équipe collaborative',
   ];
 
   const plans = [
@@ -34,7 +34,7 @@ export default function LandingPage() {
       description: 'Pour les professionnels',
       features: [
         'Sessions illimitées',
-        'Jusqu'à 5 utilisateurs',
+        'Jusqu\'à 5 utilisateurs',
         'Analytics avancés',
         'Templates métiers',
         'Export illimité',
