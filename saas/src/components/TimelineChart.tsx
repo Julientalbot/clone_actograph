@@ -12,10 +12,11 @@ interface TimelineEvent {
 }
 
 export const TimelineChart: React.FC = () => {
-  const { activities } = useWorkspaceStore();
+  const { sessions, currentSessionId } = useWorkspaceStore();
+  const currentSession = sessions.find(s => s.id === currentSessionId);
 
-  // Convertir les activités en événements timeline
-  const timelineEvents: TimelineEvent[] = activities.map((activity, index) => {
+  // Convertir les événements de session en événements timeline
+  const timelineEvents: TimelineEvent[] = currentSession?.events.map((event) => {
     const colorMap: Record<string, string> = {
       'Préparation': 'bg-gradient-to-r from-blue-500 to-blue-600',
       'Travail principal': 'bg-gradient-to-r from-emerald-500 to-green-600',
@@ -25,13 +26,13 @@ export const TimelineChart: React.FC = () => {
     };
 
     return {
-      id: activity.id,
-      name: activity.name,
-      startTime: activity.startTime,
-      endTime: activity.endTime || activity.startTime + 60, // Durée par défaut si pas terminée
-      color: colorMap[activity.name] || 'bg-gradient-to-r from-gray-500 to-gray-600'
+      id: event.id,
+      name: event.activityName,
+      startTime: event.timestamp,
+      endTime: event.timestamp + (event.duration || 60000), // Durée par défaut si pas terminée
+      color: colorMap[event.activityName] || 'bg-gradient-to-r from-gray-500 to-gray-600'
     };
-  });
+  }) || [];
 
   // Données d'exemple si pas d'activités
   const sampleEvents: TimelineEvent[] = [

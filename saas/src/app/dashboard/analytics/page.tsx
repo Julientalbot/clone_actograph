@@ -82,7 +82,7 @@ export default function AnalyticsPage() {
 
       {/* Analytics Dashboard Component */}
       {currentSession && (
-        <AnalyticsDashboard sessionId={currentSessionId} />
+        <AnalyticsDashboard sessionId={currentSessionId || undefined} />
       )}
 
       {/* No Data State */}
