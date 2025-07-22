@@ -1,24 +1,58 @@
-# ActoGraph Clone
+# ActoGraph Pro - Analyse Ergonomique SaaS
 
-Un outil d'analyse ergonomique et de chronométrage pour les études de poste de travail, développé avec React et TypeScript.
+Plateforme SaaS professionnelle d'analyse ergonomique et de chronométrage pour les études de postes de travail, développée avec Next.js et Supabase.
 
-## Fonctionnalités
+## 🚀 Fonctionnalités
 
+### 🔐 **Authentification & Gestion**
+- Inscription et connexion sécurisée avec Supabase
+- Gestion d'équipes et organisations
+- Profils utilisateur personnalisés
+- Authentification par email avec vérification
+
+### 📊 **Analyse & Chronométrage**
 - **Chronométrage haute précision** - Timer avec affichage au centième de seconde
-- **Enregistrement d'activités** - Système de catégorisation avec 5 types d'activités prédéfinies
-- **Lecteur vidéo intégré** - Upload et lecture de vidéos pour l'analyse des mouvements
-- **Visualisation chronographique** - Graphiques temporels avec statistiques détaillées
-- **Interface responsive** - Design adaptatif pour desktop et mobile
+- **Enregistrement d'activités** - Système de catégorisation ergonomique (5 types prédéfinis)
+- **Analytics avancés** - Graphiques interactifs avec Chart.js (Doughnut, Bar, Line)
+- **Sessions illimitées** - Gestion complète des sessions d'analyse
+- **Chronogramme visuel** - Timeline interactive avec statistiques détaillées
 
-## Technologies utilisées
+### 🎥 **Analyse Vidéo**
+- **Lecteur vidéo intégré** - Upload par drag & drop pour analyse des mouvements
+- **Synchronisation temps réel** - Corrélation vidéo/chronométrage
+- **Interface responsive** - Optimisé pour desktop et mobile
 
-- **React 19.1.0** - Framework frontend moderne
-- **TypeScript 5.8.3** - Typage statique pour une meilleure robustesse
-- **Vite 7.0.4** - Outil de build rapide
-- **Tailwind CSS 4.1.11** - Framework CSS utilitaire
-- **Video.js** - Bibliothèque de lecture vidéo avancée
+### 📱 **Progressive Web App (PWA)**
+- **Installation native** - Disponible sur bureau et mobile
+- **Mode hors ligne** - Fonctionnement sans connexion internet
+- **Service Worker** - Cache intelligent et synchronisation automatique
+- **Mode sombre/clair** - Interface adaptative selon les préférences
 
-## Installation et démarrage
+## 🛠 Technologies
+
+### **Backend & Infrastructure**
+- **Next.js 15.4.2** - Framework React full-stack moderne
+- **Supabase** - Backend-as-a-Service avec authentification et base de données
+- **TypeScript** - Typage statique pour robustesse et productivité
+
+### **Frontend & UI**
+- **React 19** - Bibliothèque UI moderne avec hooks avancés
+- **Tailwind CSS** - Framework CSS utilitaire avec mode sombre
+- **Chart.js + React-chartjs-2** - Graphiques interactifs professionnels
+- **Zustand** - Gestion d'état légère et performante
+
+### **PWA & Performance**
+- **Service Worker** - Cache offline et mise à jour automatique
+- **Web App Manifest** - Installation native multi-plateforme
+- **React Hot Toast** - Notifications utilisateur élégantes
+
+## 🚀 Démarrage Rapide
+
+### **Prérequis**
+- Node.js 18+ et npm
+- Compte Supabase (gratuit)
+
+### **Installation**
 
 ```bash
 # Cloner le repository
@@ -26,97 +60,96 @@ git clone https://github.com/Julientalbot/clone_actograph.git
 cd clone_actograph
 
 # Installer les dépendances
-cd client
+cd saas
 npm install
 
-# Démarrer le serveur de développement
-npm run dev
+# Configuration Supabase
+cp .env.local.example .env.local
+# Éditer .env.local avec vos clés Supabase
 ```
 
-## Déploiement
+### **Variables d'environnement**
 
-### Déploiement sur Vercel
+Créer `.env.local` dans le dossier `saas/` :
 
-1. **Méthode automatique** : Connectez votre repository GitHub à Vercel
-   - Allez sur [vercel.com](https://vercel.com)
-   - Connectez votre compte GitHub
-   - Sélectionnez le repository `clone_actograph`
-   - Vercel détectera automatiquement la configuration
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-2. **Méthode CLI** :
-   ```bash
-   # Installer Vercel CLI
-   npm i -g vercel
-   
-   # Déployer
-   vercel --prod
-   ```
-
-### Configuration Vercel
-
-Le projet est configuré avec :
-- **Build Command** : `cd client && npm run build`
-- **Output Directory** : `client/dist`
-- **Install Command** : `cd client && npm install`
-
-### Variables d'environnement
-
-Aucune variable d'environnement n'est requise pour ce projet.
-
-## Scripts disponibles
+### **Démarrage en développement**
 
 ```bash
-# Développement
+# Démarrer le serveur de développement
 npm run dev
 
-# Build de production
+# L'application sera accessible sur http://localhost:3000
+```
+
+### **Build de production**
+
+```bash
+# Construire pour la production
 npm run build
 
-# Linting
-npm run lint
-
-# Prévisualisation du build
-npm run preview
-
-# Vérification TypeScript
-npx tsc --noEmit
+# Démarrer le serveur de production
+npm start
 ```
 
-## Structure du projet
+## 📱 Installation PWA
+
+L'application peut être installée comme une app native :
+
+1. **Sur desktop** - Cliquez sur l'icône d'installation dans la barre d'adresse
+2. **Sur mobile** - Utilisez "Ajouter à l'écran d'accueil" 
+3. **Via l'app** - Utilisez le prompt d'installation intégré
+
+## 🏗 Architecture
 
 ```
-client/
+saas/
 ├── src/
-│   ├── components/          # Composants React
-│   │   ├── ActivityPanel.tsx    # Panneau d'activités
-│   │   ├── Timer.tsx            # Chronométre
-│   │   ├── VideoPlayer.tsx      # Lecteur vidéo
-│   │   └── TimelineChart.tsx    # Graphique chronologique
-│   ├── App.tsx             # Application principale
-│   └── main.tsx            # Point d'entrée
-├── public/                 # Assets publics
-└── package.json            # Dépendances et scripts
+│   ├── app/                 # Pages Next.js (App Router)
+│   │   ├── dashboard/       # Interface principale authentifiée
+│   │   ├── login/          # Connexion
+│   │   ├── signup/         # Inscription  
+│   │   └── offline/        # Page hors ligne
+│   ├── components/         # Composants React réutilisables
+│   │   ├── Timer.tsx       # Chronométrage haute précision
+│   │   ├── ActivityPanel.tsx # Gestion des activités
+│   │   ├── VideoPlayer.tsx # Lecteur vidéo avec drag&drop
+│   │   ├── TimelineChart.tsx # Chronogramme visuel
+│   │   └── AnalyticsDashboard.tsx # Graphiques avancés
+│   ├── hooks/             # Hooks React personnalisés
+│   ├── store/             # Gestion d'état Zustand
+│   └── lib/               # Utilitaires et configuration Supabase
+├── public/                # Assets statiques et PWA
+└── supabase-setup.sql    # Script de configuration base de données
 ```
 
-## Utilisation
+## 🔒 Sécurité & Conformité
 
-1. **Chronométrage** - Utilisez le timer pour mesurer précisément les durées
-2. **Enregistrement d'activités** - Cliquez sur les boutons d'activité pour logger les tâches
-3. **Analyse vidéo** - Importez une vidéo pour synchroniser l'observation
-4. **Visualisation** - Consultez le chronogramme pour analyser les données
+- **RGPD compliant** - Gestion des données utilisateur transparente
+- **Authentification sécurisée** - Chiffrement bout en bout avec Supabase
+- **Normes ergonomiques** - Compatible ISO et EN pour études professionnelles
+- **Audit de code** - ESLint et TypeScript strict activés
 
-## Types d'activités
+## 📈 Fonctionnalités Prochaines
 
-- **Préparation** (bleu) - Mise en place, préparation du poste
-- **Travail principal** (vert) - Tâches productives principales
-- **Pause** (jaune) - Temps de repos, pauses
-- **Attente** (rouge) - Temps d'attente, blocages
-- **Communication** (violet) - Interactions, échanges
+- Export PDF/Excel avancé
+- Templates sectoriels personnalisables
+- API publique pour intégrations
+- Analytics prédictifs avec IA
+- Collaboration temps réel multi-utilisateurs
 
-## Contribution
+## 🤝 Contribution
 
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir des issues ou proposer des pull requests.
+Les contributions sont les bienvenues ! Consultez les [issues](https://github.com/Julientalbot/clone_actograph/issues) pour les fonctionnalités demandées.
 
-## License
+## 📄 Licence
 
-Ce projet est distribué sous licence MIT.
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+---
+
+**ActoGraph Pro** - Transformez vos analyses ergonomiques avec la puissance du cloud ⚡️
