@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import toast from 'react-hot-toast';
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedPlan = searchParams.get('plan') || 'free';
@@ -247,5 +247,13 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div>Chargement...</div>}>
+      <SignupForm />
+    </Suspense>
   );
 }

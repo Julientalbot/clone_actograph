@@ -1,4 +1,12 @@
+'use client';
+
 export default function OfflinePage() {
+  const handleReload = () => {
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
       <div className="text-center px-4">
@@ -12,7 +20,7 @@ export default function OfflinePage() {
           Vérifiez votre connexion internet et réessayez
         </p>
         <button
-          onClick={() => window.location.reload()}
+          onClick={handleReload}
           className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
